@@ -19,6 +19,7 @@ async function createAccount() {
   const newAccount = await new hedera.AccountCreateTransaction()
     .setKey(newAccountPublicKey)
     .setInitialBalance(new hedera.Hbar(100))
+    .setMaxAutomaticTokenAssociations(10)
     .execute(client);
 
   // Get the new account ID

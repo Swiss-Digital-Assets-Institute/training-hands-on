@@ -9,9 +9,13 @@ async function createToken(tokenName, tokenSymbol) {
   const transaction = await new hedera.TokenCreateTransaction()
     .setTokenName(tokenName)
     .setTokenSymbol(tokenSymbol)
+    .setTokenMemo("Token for UZH")
     .setTokenType(hedera.TokenType.FungibleCommon)
     .setTreasuryAccountId(operatorConfig.operatorAccountId)
     .setInitialSupply(2000)
+    .setSupplyType(hedera.TokenSupplyType.Finite)
+    .setMaxSupply(10000)
+    //.setDecimals(2)
     .setAdminKey(hedera.PublicKey.fromString(operatorConfig.operatorPublicKey))
     .setSupplyKey(hedera.PublicKey.fromString(operatorConfig.operatorPublicKey))
     .execute(client);
@@ -26,7 +30,7 @@ async function createToken(tokenName, tokenSymbol) {
   console.log(
     `Check it out on hashscan: https://hashscan.io/testnet/token/${tokenId}`
   );
-  return tokenId
+  return tokenId;
 }
 
 async function deleteToken(tokenId) {
@@ -40,4 +44,17 @@ async function deleteToken(tokenId) {
   console.log("Token deleted :(");
 }
 
-module.exports = { createToken, deleteToken };
+async function mintMoreToken(tokenId, amount) {
+  // Init operator
+  client = await operator.initOperator();
+
+  //Create the transaction and freeze for manual signing
+  const transaction = await new hedera.TokenMintTransaction()
+    .setTokenId(tokenId)
+    .setAmount(amount)
+    .execute(client);
+
+  console.log(`Total token supply increased by ${amount}`);
+}
+
+module.exports = { createToken, deleteToken, mintMoreToken };

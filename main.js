@@ -16,14 +16,13 @@ async function main() {
   // Send Crypto with that allowance
   //await utils.spendAllowance(accountId, privateKey, "0.0.5485", 10);
 
-
-
-
   // Create Token
   const tokenId = await utils.createToken("UniZüri", "UZH");
-
+  //const tokenId = "0.0.15076783"
   // Delete Token
-  await utils.deleteToken(tokenId);
+  // await utils.deleteToken(tokenId);
+
+  await utils.mintMoreToken(tokenId, 1000);
 
   process.exit();
 }
