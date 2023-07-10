@@ -1,7 +1,7 @@
 // Import hedera SDK
-var hedera = require("@hashgraph/sdk");
-var operator = require("./operator");
-var operatorConfig = require("../operator.json");
+const hedera = require("@hashgraph/sdk");
+const operator = require("./operator");
+const operatorConfig = require("../operator.json");
 
 async function createAccount() {
   // Create new ED25519 key pair
@@ -28,7 +28,11 @@ async function createAccount() {
   //Log the account ID
   console.log("The new account ID is: " + newAccountId);
 
-  return newAccountId;
+  return {
+    accountId: newAccountId,
+    privateKey: newAccountPrivateKey,
+    publicKey: newAccountPublicKey,
+  };
 }
 
 async function queryAccount(accountId) {
@@ -69,9 +73,62 @@ async function transferHbar(receiverAccountId, amount) {
   console.log("The transaction consensus status is " + transactionStatus);
 }
 
+async function hbarAllowance(spenderAccountId, amount) {
+  // Init operator
+  client = await operator.initOperator();
+
+  console.log("Creating allowance transaction");
+  //Create allowance transaction
+  const transaction = await new hedera.AccountAllowanceApproveTransaction()
+    .approveHbarAllowance(
+      operatorConfig.operatorAccountId,
+      spenderAccountId,
+      hedera.Hbar.from(amount)
+    )
+    .execute(client);
+
+  //Request the receipt of the transaction
+  const receipt = await transaction.getReceipt(client);
+
+  console.log(
+    "The transaction consensus status is " + receipt.status.toString()
+  );
+}
+
+async function spendAllowance(
+  spenderAccountId,
+  spenderPrivateKey,
+  receiverAccountId,
+  amount
+) {
+  // Init operator
+  client = await operator.initOperator();
+
+  console.log("Creating transaction to send allowance");
+  const prepTransaction = await new hedera.TransferTransaction()
+    .addApprovedHbarTransfer(
+      operatorConfig.operatorAccountId,
+      new hedera.Hbar(-amount)
+    )
+    .addHbarTransfer(receiverAccountId, new hedera.Hbar(amount))
+    .setTransactionId(hedera.TransactionId.generate(spenderAccountId)) // Spender must generate the TX ID or be the client
+    .freezeWith(client)
+    .sign(spenderPrivateKey);
+
+  const transaction = await prepTransaction.execute(client);
+  //Request the receipt of the transaction
+  const receipt = await transaction.getReceipt(client);
+
+  console.log(
+    "The transaction consensus status is " + receipt.status.toString()
+  );
+}
+
 // Export Module
 module.exports = {
   createAccount,
   queryAccount,
   transferHbar,
+  hbarAllowance,
+  spendAllowance,
 };
