@@ -1,16 +1,16 @@
-var Hedera = require("@hashgraph/sdk");
+const hedera = require("@hashgraph/sdk");
 const operator = require("../operator.json");
 
 async function initOperator() {
   // Init Operator
-  const operatorAccountId = Hedera.AccountId.fromString(
+  const operatorAccountId = hedera.AccountId.fromString(
     operator.operatorAccountId
   );
-  const operatorPrivateKey = Hedera.PrivateKey.fromString(
+  const operatorPrivateKey = hedera.PrivateKey.fromString(
     operator.operatorPrivateKey
   );
   // Create a client and return it
-  const client = Hedera.Client.forTestnet();
+  const client = hedera.Client.forTestnet();
   client.setOperator(operatorAccountId, operatorPrivateKey);
   return client;
 }

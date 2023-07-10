@@ -1,4 +1,5 @@
 {
     "operatorAccountId": "",
-    "operatorPrivateKey": ""
+    "operatorPrivateKey": "",
+    "operatorPublicKey": ""
 }
