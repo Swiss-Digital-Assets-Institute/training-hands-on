@@ -8,8 +8,8 @@ async function createTopic() {
   client = await operator.initOperator();
 
   const transaction = await new hedera.TopicCreateTransaction()
-    .setAdminKey(operatorConfig.operatorPublicKey)
-    .setSubmitKey(operatorConfig.operatorPublicKey)
+    .setAdminKey(hedera.PublicKey.fromString(operatorConfig.operatorPublicKey))
+    .setSubmitKey(hedera.PublicKey.fromString(operatorConfig.operatorPublicKey))
     .setTopicMemo("A personal Topic")
     .execute(client);
 
@@ -24,22 +24,51 @@ async function createTopic() {
   return newTopicId;
 }
 
-async function submitMessage(topicId) {
+async function submitMessage(topicId, message) {
   // Init operator
   console.log("Initializing the client...");
   client = await operator.initOperator();
+
+  //Create the transaction
+  console.log("Create and execute TopicMessageSubmitTransaction");
+  await new hedera.TopicMessageSubmitTransaction({
+    topicId: topicId,
+    message: message,
+  }).execute(client);
 }
 
 async function getTopicMessages(topicId) {
   // Init operator
   console.log("Initializing the client...");
   client = await operator.initOperator();
+
+  //Create the query
+  console.log("Subscribing to topic");
+  new hedera.TopicMessageQuery()
+    .setTopicId(topicId)
+    .setStartTime(0)
+    .setEndTime(15000)
+    .subscribe(client, (message) =>
+      console.log(Buffer.from(message.contents, "utf8").toString())
+    );
 }
 
 async function deleteTopic(topicId) {
   // Init operator
   console.log("Initializing the client...");
   client = await operator.initOperator();
+
+  const transaction = await new hedera.TopicDeleteTransaction()
+    .setTopicId(topicId)
+    .execute(client);
+
+  //Request the receipt of the transaction
+  const receipt = await transaction.getReceipt(client);
+
+  //Get the transaction consensus status
+  const transactionStatus = receipt.status;
+
+  console.log("The transaction consensus status is " + transactionStatus);
 }
 
 module.exports = { createTopic, submitMessage, getTopicMessages, deleteTopic };

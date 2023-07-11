@@ -81,27 +81,42 @@ async function main() {
   // await utils.burnNft(nftId, 1);
   // console.log('NFT burned successfully.\n');
 
+  // === SECTION 12: Create Topic ===
+  console.log("=== SECTION 12: Create Topic ===\n");
+  const topicId = await utils.createTopic();
+
+  // === SECTION 13: Submit Message ===
+  console.log("=== SECTION 13: Submit Message ===\n");
+  await utils.submitMessage(topicId, "My first message");
+
+  // === SECTION 14: Get Topic Messages ===
+  console.log("=== SECTION 14: Get Topic Messages ===\n");
+  await utils.getTopicMessages(topicId);
+
+  // === SECTION 15: Delete Topic ===
+  console.log("=== SECTION 15: Delete Topic ===\n");
+  await utils.deleteTopic(topicId);
+
   // === SECTION 12: Smart Contract deployment ===
-  console.log("=== SECTION 12: Smart Contract deployment ===\n");
+  console.log("=== SECTION 16: Smart Contract deployment ===\n");
 
   // Uncomment the line below to deploy the eSeal contract
   // const contractId = await utils.deployContract();
-  const contractId = "0.0.15144594";
   // console.log("Contract deployed successfully \n");
 
   // === SECTION 13: Call smart contract ===
-  console.log("=== SECTION 13: Smart Contract call ===\n");
+  console.log("=== SECTION 17: Smart Contract call ===\n");
 
   // Uncomment the line below to call the greet function
-  await utils.callGreetFunction(contractId);
-  console.log("Query successfully executed \n");
+  // await utils.callGreetFunction(contractId);
+  // console.log("Query successfully executed \n");
 
   // === SECTION 14: Call smart contract ===
-  console.log("=== SECTION 14: Smart Contract call ===\n");
+  console.log("=== SECTION 18: Smart Contract call ===\n");
 
   // Uncomment the line below to call the greet function
-  await utils.callSetGreetFunction(contractId, "Greetings from UZH!");
-  console.log("Call successfully executed \n");
+  // await utils.callSetGreetFunction(contractId, "Greetings from UZH!");
+  // console.log("Call successfully executed \n");
 
   console.log("===== End of HandsOn =====\n");
 
