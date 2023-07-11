@@ -64,15 +64,15 @@ async function main() {
   console.log("=== SECTION 9: NFT Creation ===\n");
 
   // Uncomment the line below to create a new NFT
-  const nftId = await utils.createNft();
-  console.log('NFT created successfully.\n');
+  // const nftId = await utils.createNft();
+  // console.log("NFT created successfully.\n");
 
   // === SECTION 10: NFT MINTING ===
   console.log("=== SECTION 10: NFT Minting ===\n");
 
   // Uncomment the line below to mint a new instance of the NFT created in the previous step
-  await utils.mintNft(nftId);
-  console.log('NFT minted successfully.\n');
+  // await utils.mintNft(nftId);
+  // console.log("NFT minted successfully.\n");
 
   // === SECTION 11: NFT BURNING ===
   console.log("=== SECTION 11: NFT Burning ===\n");
@@ -81,7 +81,21 @@ async function main() {
   // await utils.burnNft(nftId, 1);
   // console.log('NFT burned successfully.\n');
 
-  console.log("===== End of Tutorial =====\n");
+  // === SECTION 12: Smart Contract deployment ===
+  console.log("=== SECTION 12: Smart Contract deployment ===\n");
+
+  // Uncomment the line below to deploy the eSeal contract
+  await utils.deployContract();
+  // console.log("Contract deployed successfully \n");
+
+  // === SECTION 13: Call smart contract function ===
+  console.log("=== SECTION 13: Smart Contract call seal function ===\n");
+
+  // Uncomment the line below to deploy the eSeal contract
+  // await utils.sealDocument("0.0.15135574", "operator.json");
+  console.log("Document successfully sealed \n");
+
+  console.log("===== End of HandsOn =====\n");
 
   // End process
   process.exit();

@@ -1,0 +1,40 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/jerome/Documents/dev/github/training-hands-on/contracts/HelloHedera.sol": {
+      "lastModificationDate": 1689075049746,
+      "contentHash": "93aa6c8fe1847be2031c5cb85129e6a4",
+      "sourceName": "contracts/HelloHedera.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.9"
+      ],
+      "artifacts": [
+        "HelloHedera"
+      ]
+    }
+  }
+}
