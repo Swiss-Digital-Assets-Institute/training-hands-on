@@ -5,6 +5,11 @@ const operatorConfig = require("../operator.json");
 const contract = require("../artifacts/contracts/HelloHedera.sol/HelloHedera.json");
 const bytecode = contract.bytecode;
 
+/**
+ * Deploys the smart contract to the Hedera network.
+ *
+ * @returns {string} - The new contract's ID
+ */
 async function deployContract() {
   // Init client
   console.log("Initializing the client...");
@@ -33,6 +38,11 @@ async function deployContract() {
   return receipt.contractId;
 }
 
+/**
+ * Calls the 'greet' function of the provided smart contract.
+ *
+ * @param {string} contractId - The ID of the contract to call
+ */
 async function callGreetFunction(contractId) {
   // Init client
   console.log("Initializing the client...");
@@ -59,6 +69,12 @@ async function callGreetFunction(contractId) {
   console.log("The contract message: " + message);
 }
 
+/**
+ * Calls the 'setGreeting' function of the provided smart contract with a new greeting message.
+ *
+ * @param {string} contractId - The ID of the contract to call
+ * @param {string} newGreetingMessage - The new greeting message
+ */
 async function callSetGreetFunction(contractId, newGreetingMessage) {
   //Create the transaction to update the contract message
   const contractExecTx = await new hedera.ContractExecuteTransaction()

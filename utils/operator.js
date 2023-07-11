@@ -1,5 +1,5 @@
 const hedera = require("@hashgraph/sdk");
-const operator = require("../operator.json");
+const operatorConfig = require("../operator.json");
 
 /**
  * This function initializes a client using the Hedera Hashgraph SDK.
@@ -9,12 +9,11 @@ const operator = require("../operator.json");
  * @returns {Object} client - An instance of the Hedera Hashgraph client connected to the testnet network and configured with the operator
  */
 async function initOperator() {
-  // Init Operator
   const operatorAccountId = hedera.AccountId.fromString(
-    operator.operatorAccountId
+    operatorConfig.operatorAccountId
   );
   const operatorPrivateKey = hedera.PrivateKey.fromString(
-    operator.operatorPrivateKey
+    operatorConfig.operatorPrivateKey
   );
   // Create a client and return it
   const client = hedera.Client.forTestnet();
