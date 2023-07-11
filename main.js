@@ -85,15 +85,23 @@ async function main() {
   console.log("=== SECTION 12: Smart Contract deployment ===\n");
 
   // Uncomment the line below to deploy the eSeal contract
-  await utils.deployContract();
+  // const contractId = await utils.deployContract();
+  const contractId = "0.0.15144594";
   // console.log("Contract deployed successfully \n");
 
-  // === SECTION 13: Call smart contract function ===
-  console.log("=== SECTION 13: Smart Contract call seal function ===\n");
+  // === SECTION 13: Call smart contract ===
+  console.log("=== SECTION 13: Smart Contract call ===\n");
 
-  // Uncomment the line below to deploy the eSeal contract
-  // await utils.sealDocument("0.0.15135574", "operator.json");
-  console.log("Document successfully sealed \n");
+  // Uncomment the line below to call the greet function
+  await utils.callGreetFunction(contractId);
+  console.log("Query successfully executed \n");
+
+  // === SECTION 14: Call smart contract ===
+  console.log("=== SECTION 14: Smart Contract call ===\n");
+
+  // Uncomment the line below to call the greet function
+  await utils.callSetGreetFunction(contractId, "Greetings from UZH!");
+  console.log("Call successfully executed \n");
 
   console.log("===== End of HandsOn =====\n");
 
