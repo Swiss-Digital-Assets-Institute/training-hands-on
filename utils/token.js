@@ -41,7 +41,7 @@ async function deleteToken(tokenId) {
     .setTokenId(tokenId)
     .execute(client);
 
-  console.log("Token deleted :(");
+  console.log("Token deleted");
 }
 
 async function mintMoreToken(tokenId, amount) {

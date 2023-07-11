@@ -17,12 +17,19 @@ async function main() {
   //await utils.spendAllowance(accountId, privateKey, "0.0.5485", 10);
 
   // Create Token
-  const tokenId = await utils.createToken("UniZüri", "UZH");
-  //const tokenId = "0.0.15076783"
+  //const tokenId = await utils.createToken("UniZüri", "UZH");
+
   // Delete Token
   // await utils.deleteToken(tokenId);
 
-  await utils.mintMoreToken(tokenId, 1000);
+  // Mint more Tokens
+  // await utils.mintMoreToken(tokenId, 1000);
+
+  // Create Nft
+  const nftId = await utils.createNft();
+
+  // Mint Nft
+  await utils.mintNft(nftId);
 
   process.exit();
 }
