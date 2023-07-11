@@ -11,6 +11,7 @@ const operatorConfig = require("../operator.json");
  */
 async function createAccount() {
   // Create new ED25519 key pair
+  console.log("Generating a new ED25519 key pair...");
   const newAccountPrivateKey = hedera.PrivateKey.generateED25519();
   const newAccountPublicKey = newAccountPrivateKey.publicKey;
 
@@ -19,9 +20,11 @@ async function createAccount() {
   console.log(`PublicKey: ${newAccountPublicKey.toString()}`);
 
   // Init operator
+  console.log("Initializing the client...");
   client = await operator.initOperator();
 
   // Create a new account with 10 Hbar starting balance
+  console.log("Creating a new account with 100 Hbar starting balance...");
   const newAccount = await new hedera.AccountCreateTransaction()
     .setKey(newAccountPublicKey)
     .setInitialBalance(new hedera.Hbar(100))
@@ -29,11 +32,12 @@ async function createAccount() {
     .execute(client);
 
   // Get the new account ID
+  console.log("Fetching the new account ID...");
   const getReceipt = await newAccount.getReceipt(client);
   const newAccountId = getReceipt.accountId;
 
   //Log the account ID
-  console.log("The new account ID is: " + newAccountId);
+  console.log(`The new account ID is: ${newAccountId}`);
 
   return {
     accountId: newAccountId,
@@ -48,10 +52,12 @@ async function createAccount() {
  * @param {string} accountId - The ID of the account to query
  */
 async function queryAccount(accountId) {
-  console.info("Calling queryAccount function");
   // Init operator
+  console.log("Initializing the client...");
   client = await operator.initOperator();
+
   // Create and execute the query
+  console.log("Creating and executing the balance query...");
   const query = await new hedera.AccountBalanceQuery()
     .setAccountId(accountId)
     .execute(client);
@@ -69,8 +75,11 @@ async function queryAccount(accountId) {
  */
 async function transferHbar(receiverAccountId, amount) {
   // Init operator
+  console.log("Initializing the client...");
   client = await operator.initOperator();
+
   // Create the transfer transaction
+  console.log("Creating the transfer transaction...");
   const transaction = new hedera.TransferTransaction()
     .addHbarTransfer(operatorConfig.operatorAccountId, new hedera.Hbar(-amount))
     .addHbarTransfer(receiverAccountId, new hedera.Hbar(amount));
@@ -80,9 +89,11 @@ async function transferHbar(receiverAccountId, amount) {
   );
 
   // Sign with the client operator key and submit the transaction to a Hedera network
+  console.log("Signing and submitting the transaction...");
   const txId = await transaction.execute(client);
 
   // Request the receipt of the transaction
+  console.log("Requesting the transaction receipt...");
   const receipt = await txId.getReceipt(client);
 
   // Get the transaction consensus status
@@ -93,7 +104,7 @@ async function transferHbar(receiverAccountId, amount) {
 
 /**
  * This function uses a provided private key to spend an approved amount of Hbar from the operator's account to another Hedera account.
- * 
+ *
  * @param {string} spenderAccountId - The ID of the account that the allowance is being granted to
  * @param {string} spenderPrivateKey - The private key of the account that the allowance is being granted to
  * @param {string} receiverAccountId - The ID of the account to receive the allowance
@@ -101,10 +112,11 @@ async function transferHbar(receiverAccountId, amount) {
  */
 async function hbarAllowance(spenderAccountId, amount) {
   // Init operator
+  console.log("Initializing the client...");
   client = await operator.initOperator();
 
-  console.log("Creating allowance transaction");
   //Create allowance transaction
+  console.log("Creating the allowance transaction...");
   const transaction = await new hedera.AccountAllowanceApproveTransaction()
     .approveHbarAllowance(
       operatorConfig.operatorAccountId,
@@ -114,6 +126,7 @@ async function hbarAllowance(spenderAccountId, amount) {
     .execute(client);
 
   //Request the receipt of the transaction
+  console.log("Fetching the transaction receipt...");
   const receipt = await transaction.getReceipt(client);
 
   console.log(
@@ -128,9 +141,11 @@ async function spendAllowance(
   amount
 ) {
   // Init operator
+  console.log("Initializing the client...");
   client = await operator.initOperator();
 
-  console.log("Creating transaction to send allowance");
+  // Create Transaction to spend allowance
+  console.log("Creating transaction to spend allowance");
   const prepTransaction = await new hedera.TransferTransaction()
     .addApprovedHbarTransfer(
       operatorConfig.operatorAccountId,
@@ -141,8 +156,11 @@ async function spendAllowance(
     .freezeWith(client)
     .sign(spenderPrivateKey);
 
+  console.log("Executing the transaction...");
   const transaction = await prepTransaction.execute(client);
+  
   //Request the receipt of the transaction
+  console.log('Requesting the transaction receipt...');
   const receipt = await transaction.getReceipt(client);
 
   console.log(
