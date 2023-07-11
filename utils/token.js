@@ -2,6 +2,15 @@ const hedera = require("@hashgraph/sdk");
 const operator = require("./operator");
 const operatorConfig = require("../operator.json");
 
+/**
+ * This function creates a new fungible token with a unique token name and symbol.
+ * The initial supply of the token is set to 2000 with a maximum supply of 10000.
+ *
+ * @param {string} tokenName - The unique name of the token to create
+ * @param {string} tokenSymbol - The unique symbol of the token to create
+ *
+ * @returns {string} tokenId - The ID of the newly created token
+ */
 async function createToken(tokenName, tokenSymbol) {
   // Init operator
   client = await operator.initOperator();
@@ -33,6 +42,11 @@ async function createToken(tokenName, tokenSymbol) {
   return tokenId;
 }
 
+/**
+ * This function deletes a previously created token using its token ID.
+ *
+ * @param {string} tokenId - The ID of the token to delete
+ */
 async function deleteToken(tokenId) {
   // Init operator
   client = await operator.initOperator();
@@ -44,6 +58,13 @@ async function deleteToken(tokenId) {
   console.log("Token deleted");
 }
 
+/**
+ * This function mints (creates) more of a previously created fungible token using its token ID.
+ * The amount of tokens to mint is specified as an input parameter.
+ *
+ * @param {string} tokenId - The ID of the token to mint
+ * @param {number} amount - The amount of tokens to mint
+ */
 async function mintMoreToken(tokenId, amount) {
   // Init operator
   client = await operator.initOperator();

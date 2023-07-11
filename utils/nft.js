@@ -2,6 +2,14 @@ const hedera = require("@hashgraph/sdk");
 const operator = require("./operator");
 const operatorConfig = require("../operator.json");
 
+/**
+ * This function creates a new Non-Fungible Token (NFT) with a unique token name and symbol.
+ *
+ * @param {string} tokenName - The unique name of the NFT to create
+ * @param {string} tokenSymbol - The unique symbol of the NFT to create
+ *
+ * @returns {string} tokenId - The ID of the newly created token
+ */
 async function createNft(tokenName, tokenSymbol) {
   // Init operator
   client = await operator.initOperator();
@@ -31,7 +39,14 @@ async function createNft(tokenName, tokenSymbol) {
   return tokenId;
 }
 
+/**
+ * This function mints a new NFT using the ID of a previously created token.
+ *
+ * @param {string} tokenId - The ID of the token to mint
+ */
 async function mintNft(tokenId) {
+  // Init operator
+  client = await operator.initOperator();
   //IPFS content identifiers for which we will create a NFT
   CID = "ipfs://bafybeig5vygdwxnahwgp7vku6kyz4e3hdjsg4uikfz5sujbsummozw3wp4";
 
@@ -61,4 +76,30 @@ async function mintNft(tokenId) {
   );
 }
 
-module.exports = { createNft, mintNft };
+/**
+ * This function mints a new NFT using the ID of a previously created token.
+ * 
+ * @param {string} tokenId - The ID of the token to mint
+ */
+async function burnNft(tokenId, serial) {
+  // Init operator
+  client = await operator.initOperator();
+
+  console.log(`Burning serial: ${serial} of token: ${tokenId}`);
+  const burnTx = await new hedera.TokenBurnTransaction()
+    .setTokenId(tokenId)
+    .setSerials([serial])
+    .execute(client);
+
+  //Request the receipt of the transaction
+  const receipt = await burnTx.getReceipt(client);
+
+  //Get the transaction consensus status
+  const transactionStatus = receipt.status;
+
+  console.log(
+    `The transaction consensus status: ${transactionStatus.toString()}`
+  );
+}
+
+module.exports = { createNft, mintNft, burnNft };

@@ -3,6 +3,12 @@ const hedera = require("@hashgraph/sdk");
 const operator = require("./operator");
 const operatorConfig = require("../operator.json");
 
+/**
+ * This function generates a new ED25519 key pair and uses it to create a new Hedera account.
+ * It then retrieves and prints the account ID, Private Key and Public Key of the new account.
+ *
+ * @returns {Object} - Object with the new account's ID, private key, and public key
+ */
 async function createAccount() {
   // Create new ED25519 key pair
   const newAccountPrivateKey = hedera.PrivateKey.generateED25519();
@@ -36,6 +42,11 @@ async function createAccount() {
   };
 }
 
+/**
+ * This function retrieves and prints the balance of the provided Hedera account.
+ *
+ * @param {string} accountId - The ID of the account to query
+ */
 async function queryAccount(accountId) {
   console.info("Calling queryAccount function");
   // Init operator
@@ -50,6 +61,12 @@ async function queryAccount(accountId) {
   console.log(JSON.stringify(query));
 }
 
+/**
+ * This function approves a specified amount of Hbar to be spent from the operator's account by another Hedera account.
+ *
+ * @param {string} spenderAccountId - The ID of the account that the allowance is being granted to
+ * @param {number} amount - The amount of Hbar to approve for allowance
+ */
 async function transferHbar(receiverAccountId, amount) {
   // Init operator
   client = await operator.initOperator();
@@ -74,6 +91,14 @@ async function transferHbar(receiverAccountId, amount) {
   console.log("The transaction consensus status is " + transactionStatus);
 }
 
+/**
+ * This function uses a provided private key to spend an approved amount of Hbar from the operator's account to another Hedera account.
+ * 
+ * @param {string} spenderAccountId - The ID of the account that the allowance is being granted to
+ * @param {string} spenderPrivateKey - The private key of the account that the allowance is being granted to
+ * @param {string} receiverAccountId - The ID of the account to receive the allowance
+ * @param {number} amount - The amount of Hbar to transfer
+ */
 async function hbarAllowance(spenderAccountId, amount) {
   // Init operator
   client = await operator.initOperator();
